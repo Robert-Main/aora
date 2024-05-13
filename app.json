@@ -23,7 +23,7 @@
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#ffffff"
 			},
-			"package": "com.roma.aora"
+			"package": "com.romah.aora"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"

@@ -6,11 +6,9 @@ import { useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { images } from "../../constants";
-import { useGlobalContext } from "../../context/globalProvider";
-import { getCurrentUser, signIn } from "../../lib/appwrite";
+import { signIn } from "../../lib/appwrite";
 
 const SignIn = () => {
-    const { setUser, setIsLogged } = useGlobalContext();
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
         email: "",
@@ -18,7 +16,7 @@ const SignIn = () => {
     });
 
     const submit = async () => {
-        if (form.email === "" || form.password === "") {
+        if (!form.email || !form.password) {
             Alert.alert("Error", "Please fill in all fields");
         }
 
@@ -26,11 +24,8 @@ const SignIn = () => {
 
         try {
             await signIn(form.email, form.password);
-            const result = await getCurrentUser();
-            setUser(result);
-            setIsLogged(true);
 
-            Alert.alert("Success", "User signed in successfully");
+            // Alert.alert("Success", "User signed in successfully");
             router.replace("/home");
         } catch (error) {
             Alert.alert("Error", error.message);
@@ -40,10 +35,10 @@ const SignIn = () => {
     };
 
     return (
-        <SafeAreaView className="bg-primary h-full">
+        <SafeAreaView className="h-full bg-primary">
             <ScrollView>
                 <View
-                    className="w-full flex justify-center h-full px-4 my-6"
+                    className="flex items-center justify-center w-full h-full px-4 my-6"
                     style={{
                         minHeight: Dimensions.get("window").height - 100,
                     }}
@@ -54,7 +49,7 @@ const SignIn = () => {
                         className="w-[115px] h-[34px]"
                     />
 
-                    <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
+                    <Text className="mt-10 text-2xl font-semibold text-white font-psemibold">
                         Log in to Aora
                     </Text>
 
@@ -78,11 +73,11 @@ const SignIn = () => {
                     <CustomButton
                         title="Sign In"
                         handlePress={submit}
-                        containerStyles="mt-7"
+                        containerStyles="mt-7 w-full"
                         isLoading={isSubmitting}
                     />
 
-                    <View className="flex justify-center pt-5 flex-row gap-2">
+                    <View className="flex flex-row justify-center gap-2 pt-5">
                         <Text className="text-lg text-gray-100 font-pregular">
                             Don't have an account?
                         </Text>
