@@ -6,7 +6,8 @@ import { useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import { images } from "../../constants";
-import { signIn } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/globalProvider";
+import { getCurrentUser, signIn } from "../../lib/appwrite";
 
 const SignIn = () => {
     const [isSubmitting, setSubmitting] = useState(false);
@@ -16,6 +17,7 @@ const SignIn = () => {
     });
 
     const submit = async () => {
+        const { setUser, setIsLogged } = useGlobalContext();
         if (!form.email || !form.password) {
             Alert.alert("Error", "Please fill in all fields");
         }
@@ -24,8 +26,11 @@ const SignIn = () => {
 
         try {
             await signIn(form.email, form.password);
+            const result = await getCurrentUser();
+            setUser(result);
+            setIsLogged(true);
 
-            // Alert.alert("Success", "User signed in successfully");
+            Alert.alert("Success", "User signed in successfully");
             router.replace("/home");
         } catch (error) {
             Alert.alert("Error", error.message);
