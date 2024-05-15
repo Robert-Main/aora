@@ -7,12 +7,14 @@ import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import VideoCard from "../../components/VideoCard";
 import { images } from "../../constants";
-import useAppwrite from "../../context/useAppwrite";
 import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
+import useAppwrite from "../../lib/useAppwrite";
 
 const Home = () => {
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
+
+    console.log(posts);
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -27,15 +29,7 @@ const Home = () => {
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
-                renderItem={({ item }) => (
-                    <VideoCard
-                        title={item.title}
-                        thumbnail={item.thumbnail}
-                        video={item.video}
-                        creator={item.creator.username}
-                        avatar={item.creator.avatar}
-                    />
-                )}
+                renderItem={({ item }) => <VideoCard video={item} />}
                 ListHeaderComponent={() => (
                     <View className="flex px-4 my-6 space-y-6">
                         <View className="flex flex-row items-start justify-between mb-6">

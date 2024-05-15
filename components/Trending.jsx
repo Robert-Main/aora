@@ -15,7 +15,7 @@ const zoomIn = {
         scale: 0.9,
     },
     1: {
-        scale: 1,
+        scale: 1.1,
     },
 };
 

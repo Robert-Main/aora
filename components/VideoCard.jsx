@@ -4,7 +4,14 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { icons } from "../constants";
 
-const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
+const VideoCard = ({
+    video: {
+        title,
+        thumbnail,
+        video,
+        creator: { username, avatar },
+    },
+}) => {
     const [play, setPlay] = useState(false);
 
     return (
@@ -30,7 +37,7 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video }) => {
                             className="text-xs text-gray-100 font-pregular"
                             numberOfLines={1}
                         >
-                            {creator}
+                            {username}
                         </Text>
                     </View>
                 </View>
