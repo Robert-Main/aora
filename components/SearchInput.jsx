@@ -4,7 +4,7 @@ import { Alert, Image, TextInput, TouchableOpacity, View } from "react-native";
 
 import { icons } from "../constants";
 
-const SearchInput = ({ initialQuery }) => {
+const SearchInput = (initialQuery) => {
     const pathname = usePathname();
     const [query, setQuery] = useState(initialQuery || "");
 
