@@ -12,7 +12,6 @@ import useAppwrite from "../../lib/useAppwrite";
 const Search = () => {
     const { query } = useLocalSearchParams();
     const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
-    console.log(query);
 
     useEffect(() => {
         refetch();
@@ -23,15 +22,7 @@ const Search = () => {
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
-                renderItem={({ item }) => (
-                    <VideoCard
-                        title={item.title}
-                        thumbnail={item.thumbnail}
-                        video={item.video}
-                        creator={item.creator.username}
-                        avatar={item.creator.avatar}
-                    />
-                )}
+                renderItem={({ item }) => <VideoCard video={item} />}
                 ListHeaderComponent={() => (
                     <>
                         <View className="flex px-4 my-6">
@@ -61,5 +52,4 @@ const Search = () => {
         </SafeAreaView>
     );
 };
-
 export default Search;

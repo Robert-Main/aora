@@ -7,10 +7,13 @@ import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import VideoCard from "../../components/VideoCard";
 import { images } from "../../constants";
+import { useGlobalContext } from "../../context/globalProvider";
 import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 
 const Home = () => {
+    const { user } = useGlobalContext();
+
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
 
@@ -36,7 +39,7 @@ const Home = () => {
                                     Welcome Back
                                 </Text>
                                 <Text className="text-2xl text-white font-psemibold">
-                                    Robert
+                                    {user?.username}
                                 </Text>
                             </View>
 

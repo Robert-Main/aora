@@ -9,6 +9,7 @@ import { images } from "../../constants";
 import { createUser } from "../../lib/appwrite";
 
 const SignUp = () => {
+    const { setUser } = useGlobalContext();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [form, setForm] = useState({
         username: "",
@@ -27,7 +28,7 @@ const SignUp = () => {
                 form.username
             );
 
-            //set it to glibal
+            setUser(result);
             router.replace("/home");
         } catch (error) {
             Alert.alert("Error", error.message);
