@@ -36,7 +36,7 @@ const Create = () => {
                     ? ["image/jpg", "image/jpeg", "image/png"]
                     : ["video/mp4", "video/gif"],
         });
-        if (!result.cancelled) {
+        if (!result.canceled) {
             if (selectType === "image") {
                 setForm({ ...form, thumbnail: result.assets[0] });
             }
