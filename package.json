@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native/assets-registry": "^0.74.83",
     "expo": "^51.0.8",
     "expo-av": "~14.0.5",
     "expo-constants": "~16.0.1",
@@ -21,7 +22,7 @@
     "install": "^0.13.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.74.1",
+    "react-native": "^0.74.1",
     "react-native-animatable": "^1.4.0",
     "react-native-appwrite": "^0.2.2",
     "react-native-gesture-handler": "~2.16.1",
