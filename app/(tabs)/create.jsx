@@ -1,5 +1,5 @@
 import { ResizeMode, Video } from "expo-av";
-import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
     Alert,
@@ -21,7 +21,7 @@ import { createVideoPost } from "../../lib/appwrite";
 
 const Create = () => {
     const { user } = useGlobalContext();
-    const { uploading, setUpoading } = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [form, setForm] = useState({
         title: "",
         video: null,
@@ -30,11 +30,13 @@ const Create = () => {
     });
 
     const openPicker = async (selectType) => {
-        const result = await DocumentPicker.getDocumentAsync({
-            type:
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes:
                 selectType === "image"
-                    ? ["image/jpg", "image/jpeg", "image/png"]
-                    : ["video/mp4", "video/gif"],
+                    ? ImagePicker.MediaTypeOptions.Images
+                    : ImagePicker.MediaTypeOptions.Videos,
+            aspect: [4, 3],
+            quality: 1,
         });
         if (!result.canceled) {
             if (selectType === "image") {
@@ -50,7 +52,7 @@ const Create = () => {
         if (!form.title || !form.video || !form.prompt) {
             Alert.alert("Error", "Please fill in all fields");
         }
-        setUpoading(true);
+        setUploading(true);
         try {
             await createVideoPost({
                 ...form,
@@ -60,7 +62,7 @@ const Create = () => {
             router.push("/home");
         } catch (error) {
             Alert.alert("Error", error.message);
-            // setUpoading(false);
+            setUploading(false);
         } finally {
             setForm({
                 title: "",
@@ -68,7 +70,7 @@ const Create = () => {
                 thumbnail: null,
                 prompt: "",
             });
-            setUpoading(false);
+            setUploading(false);
         }
     };
 
