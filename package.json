@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@react-native/assets-registry": "^0.74.83",
-    "expo": "^51.0.8",
+    "expo": "~51.0.9",
     "expo-av": "~14.0.5",
-    "expo-constants": "~16.0.1",
+    "expo-constants": "~16.0.2",
     "expo-device": "~6.0.2",
     "expo-document-picker": "~12.0.1",
     "expo-font": "~12.0.5",
