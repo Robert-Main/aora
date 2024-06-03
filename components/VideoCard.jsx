@@ -1,5 +1,5 @@
 import { ResizeMode, Video } from "expo-av";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { icons } from "../constants";
 import { useGlobalContext } from "../context/globalProvider";
@@ -12,21 +12,26 @@ const VideoCard = ({
         video,
         creator: { username, avatar },
         $id: postId,
-        likes = [],
+        likes,
     },
-    userId,
 }) => {
     const { user } = useGlobalContext();
     const [play, setPlay] = useState(false);
-    const [liked, setLiked] = useState(likes.includes(user.$id));
+    const [liked, setLiked] = useState(false);
 
-    const [color, setColor] = useState(false);
+    useEffect(() => {
+        const initialLikes = likes ? [likes] : []; // Make sure likes is treated as an array
+        console.log("Initial Likes:", initialLikes);
+        console.log("User ID:", user.$id);
+        if (initialLikes.includes(user.$id)) {
+            setLiked(true);
+        }
+    }, [likes, user.$id]);
 
     const toggleLike = async () => {
         try {
-            await likePost(postId, user.$id);
-            setLiked((prevLiked) => !prevLiked);
-            setColor((prevColor) => !prevColor);
+            const updatedPost = await likePost(postId, user.$id);
+            setLiked(updatedPost(user.$id));
         } catch (error) {
             console.error("Failed to like the post", error);
         }
@@ -64,8 +69,7 @@ const VideoCard = ({
                     <TouchableOpacity onPress={toggleLike}>
                         <Image
                             source={icons.eye}
-                            name="checkmark-circle"
-                            style={{ tintColor: color ? "red" : "white" }}
+                            style={{ tintColor: liked ? "red" : "white" }}
                             className="w-8 h-8"
                         />
                     </TouchableOpacity>
