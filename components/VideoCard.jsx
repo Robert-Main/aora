@@ -20,23 +20,22 @@ const VideoCard = ({
     const [liked, setLiked] = useState(false);
 
     useEffect(() => {
-        const initialLikes = likes ? [likes] : []; // Make sure likes is treated as an array
+        const initialLikes = likes ? [likes] : [];
         console.log("Initial Likes:", initialLikes);
         console.log("User ID:", user.$id);
         if (initialLikes.includes(user.$id)) {
             setLiked(true);
         }
-    }, [likes, user.$id]);
+    }, [user.$id]);
 
     const toggleLike = async () => {
         try {
             const updatedPost = await likePost(postId, user.$id);
-            setLiked(updatedPost(user.$id));
+            setLiked(updatedPost.likes.includes(user.$id));
         } catch (error) {
             console.error("Failed to like the post", error);
         }
     };
-
     return (
         <View className="flex flex-col items-center px-4 mb-14">
             <View className="flex flex-row items-start gap-3">
