@@ -2,6 +2,7 @@ import { ResizeMode, Video } from "expo-av";
 import { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { icons } from "../constants";
+import { useVideoPlayback } from "../context/VideoPlaybackProvider";
 import { useGlobalContext } from "../context/globalProvider";
 import { likePost } from "../lib/appwrite";
 
@@ -16,17 +17,16 @@ const VideoCard = ({
     },
 }) => {
     const { user } = useGlobalContext();
+    const { currentVideo, setCurrentVideo } = useVideoPlayback();
     const [play, setPlay] = useState(false);
     const [liked, setLiked] = useState(false);
 
     useEffect(() => {
-        const initialLikes = likes ? [likes] : [];
-        console.log("Initial Likes:", initialLikes);
-        console.log("User ID:", user.$id);
+        const initialLikes = Array.isArray(likes) ? likes : [];
         if (initialLikes.includes(user.$id)) {
             setLiked(true);
         }
-    }, [user.$id]);
+    }, [likes, user.$id]);
 
     const toggleLike = async () => {
         try {
@@ -36,6 +36,23 @@ const VideoCard = ({
             console.error("Failed to like the post", error);
         }
     };
+
+    const togglePlay = () => {
+        if (currentVideo === postId) {
+            setPlay(false);
+            setCurrentVideo(null);
+        } else {
+            setPlay(true);
+            setCurrentVideo(postId);
+        }
+    };
+
+    useEffect(() => {
+        if (currentVideo !== postId) {
+            setPlay(false);
+        }
+    }, [currentVideo, postId]);
+
     return (
         <View className="flex flex-col items-center px-4 mb-14">
             <View className="flex flex-row items-start gap-3">
@@ -90,13 +107,14 @@ const VideoCard = ({
                     onPlaybackStatusUpdate={(status) => {
                         if (status.didJustFinish) {
                             setPlay(false);
+                            setCurrentVideo(null);
                         }
                     }}
                 />
             ) : (
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => setPlay(true)}
+                    onPress={togglePlay}
                     className="relative flex items-center justify-center w-full mt-3 h-60 rounded-xl"
                 >
                     <Image
@@ -104,7 +122,6 @@ const VideoCard = ({
                         className="w-full h-full mt-3 rounded-xl"
                         resizeMode="cover"
                     />
-
                     <Image
                         source={icons.play}
                         className="absolute w-12 h-12"
